@@ -1,399 +1,117 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>volt Language Playground ⚡</title>
-    <!-- Google Fonts للخطوط الاحترافية -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-main: #0B0F19;
-            --bg-card: #151D30;
-            --accent: #00E5FF;
-            --accent-glow: rgba(0, 229, 255, 0.4);
-            --text-main: #F3F4F6;
-            --text-muted: #9CA3AF;
-            --border: #24324F;
-            --volt-yellow: #FFEA00;
-            --console-bg: #05070B;
-            --success: #10B981;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* الهيدر الاحترافي */
-        header {
-            background: rgba(21, 29, 48, 0.7);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-badge {
-            background: linear-gradient(135deg, var(--volt-yellow), var(--accent));
-            color: #000;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        .logo-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .architect-tag {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            background: var(--bg-main);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-        }
-
-        /* مساحة العمل الرئيسية */
-        .workspace {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            padding: 2rem;
-            flex: 1;
-            max-width: 1600px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 968px) {
-            .workspace {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* كروت المحرر والكونسول */
-        .panel {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        .panel-header {
-            background-color: rgba(5, 7, 11, 0.4);
-            padding: 0.75rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .panel-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* أزرار التحكم */
-        .btn-run {
-            background: linear-gradient(135deg, #00E5FF, #00B0FF);
-            color: #000;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
-        }
-
-        .btn-run:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
-        }
-
-        .btn-run:active {
-            transform: translateY(0);
-        }
-
-        /* محرّر النصوص */
-        .editor-container {
-            flex: 1;
-            position: relative;
-            display: flex;
-        }
-
-        .editor-textarea {
-            width: 100%;
-            height: 450px;
-            background-color: transparent;
-            border: none;
-            color: #E5E7EB;
-            font-family: 'Fira Code', monospace;
-            font-size: 1rem;
-            padding: 1.5rem;
-            resize: none;
-            outline: none;
-            line-height: 1.6;
-            tab-size: 4;
-            direction: ltr;
-            text-align: left;
-        }
-
-        /* شاشة العرض والكونسول */
-        .console-box {
-            background-color: var(--console-bg);
-            flex: 1;
-            padding: 1.5rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.95rem;
-            color: #00FF66;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            direction: ltr;
-            text-align: left;
-            height: 450px;
-        }
-
-        .console-line {
-            margin-bottom: 0.5rem;
-            line-height: 1.5;
-        }
-
-        .system-msg {
-            color: var(--accent);
-        }
-
-        .error-msg {
-            color: #FF3366;
-        }
-
-        /* التذييل */
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border);
-            background: rgba(11, 15, 25, 0.8);
-        }
-    </style>
+<meta charset="UTF-8">
+<title>دليل أدوية السكري</title>
+<style>
+  body { font-family: Tahoma, Arial, sans-serif; margin: 30px; line-height: 1.7; color: #222; }
+  h1 { color: #1F4E79; text-align: center; }
+  .subtitle { text-align: center; color: #666; font-style: italic; margin-bottom: 20px; }
+  .warning { border-top: 3px solid #C00000; border-bottom: 3px solid #C00000; color: #C00000; font-weight: bold; padding: 10px; margin-bottom: 25px; }
+  h2 { color: #1F4E79; border-bottom: 2px solid #2E74B5; padding-bottom: 5px; margin-top: 35px; }
+  p.desc { margin: 8px 0 12px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+  th { background: #2E74B5; color: #fff; padding: 8px; text-align: right; font-size: 14px; }
+  td { border: 1px solid #ccc; padding: 8px; text-align: right; font-size: 14px; vertical-align: top; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .notes { margin-top: 30px; background: #f2f2f2; padding: 15px; border-radius: 8px; }
+</style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-area">
-            <div class="logo-badge">volt ⚡</div>
-            <div class="logo-title">Core Engine Playground</div>
-        </div>
-        <div class="architect-tag">Lead Architect: Ali Ahmed</div>
-    </header>
+<h1>دليل أدوية السكري</h1>
+<p class="subtitle">الأنواع، الأسماء التجارية والعلمية، وطريقة الاستخدام</p>
 
-    <main class="workspace">
-        <!-- لوحة المحرر -->
-        <div class="panel">
-            <div class="panel-header">
-                <div class="panel-title">📝 محرر الأكواد (main.fl)</div>
-                <button class="btn-run" onclick="runVoltCode()">تشغيل الكود ⚡</button>
-            </div>
-            <div class="editor-container">
-                <textarea class="editor-textarea" id="voltEditor" spellcheck="false"># ==========================================
-# تجربة لغة volt ⚡ v3.1 
-# ==========================================
-use math
-use str
 
-out "Welcome to volt Ecosystem!"
-out "-------------------------"
 
-# العمليات الحسابية المدعومة
-num x = 16
-var root = sqr_val(x)
-out "Square root of 16 is:"
-out root
+<h2>١) الميتفورمين (Metformin) - مِتْفورمِين</h2>
+<p class="desc">الخط الأول لعلاج السكري النوع الثاني. يعمل على تقليل إنتاج الكبد للسكر وزيادة حساسية الجسم للإنسولين. لا يسبب هبوط سكر عادةً عند استخدامه لوحده.</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>جلوكوفاج - جْلوكوفاج</td><td>ميتفورمين - مِتْفورمِين</td><td>الشكل العادي سريع المفعول، الأكثر استخدامًا عالميًا</td><td>بعد الأكل مباشرة، مرتين إلى ثلاث مرات يوميًا (يبدأ الطبيب بجرعة منخفضة)</td></tr>
+<tr><td>جلوكوفاج XR - جْلوكوفاج إكس آر</td><td>ميتفورمين ممتد المفعول - مِتْفورمِين مُمتَد</td><td>إطلاق بطيء يقلل مشاكل المعدة</td><td>مرة واحدة يوميًا مع العشاء أو أكبر وجبة</td></tr>
+<tr><td>جانيومت - جانِيومِت</td><td>ميتفورمين + سيتاغليبتين</td><td>دواء مركب (جرعتين في قرص واحد)</td><td>مرتين يوميًا مع الأكل</td></tr>
+</table>
 
-# التعامل مع النصوص
-str developer = "ialidev"
-str upper_dev = str_upr(developer)
-out "Developer Account:"
-out upper_dev
-</textarea>
-            </div>
-        </div>
+<h2>٢) مجموعة السلفونيل يوريا (Sulfonylureas) - سَلْفونِيل يوريا</h2>
+<p class="desc">تحفّز البنكرياس لإفراز إنسولين أكثر. فعالة لكنها قد تسبب هبوط السكر (خصوصًا إذا تأخر الأكل)، لذلك تؤخذ عادة قبل الوجبة مباشرة.</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>أماريل - أَماريل</td><td>جليميبرايد - جْليمِيبرايد</td><td>الأحدث في هذه المجموعة، جرعة واحدة تكفي غالبًا</td><td>قبل الفطور مباشرة (أو أول وجبة رئيسية)، مرة واحدة يوميًا</td></tr>
+<tr><td>ديامكرون MR - دِيامِكرون إم آر</td><td>جليكلازيد ممتد المفعول - جْليكلازِيد</td><td>خطر هبوط سكر أقل من غيره في المجموعة</td><td>قبل الفطور مباشرة، مرة واحدة يوميًا</td></tr>
+<tr><td>دَاؤنيل - دَاونِيل</td><td>جليبنكلاميد - جْليبِنكلامِيد</td><td>أقدم وأقوى، خطر هبوط السكر أعلى</td><td>قبل الوجبات مباشرة، مرة إلى مرتين يوميًا</td></tr>
+</table>
 
-        <!-- لوحة الكونسول الناتج -->
-        <div class="panel">
-            <div class="panel-header">
-                <div class="panel-title">🖥️ شاشة المخرجات (Terminal)</div>
-            </div>
-            <div class="console-box" id="voltConsole">
-                <div class="console-line system-msg">[volt] Engine initialized. Ready to compile...</div>
-            </div>
-        </div>
-    </main>
+<h2>٣) مثبطات DPP-4 / الجليبتينات - مُثَبِّطات دي بي بي فور</h2>
+<p class="desc">تزيد هرمونات طبيعية تساعد البنكرياس على إفراز الإنسولين عند ارتفاع السكر فقط. لطيفة على المعدة ولا تسبب هبوط سكر عادة.</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>جانوفيا - جانوفِيا</td><td>سيتاغليبتين - سيتاغْلِيبتين</td><td>الأكثر شهرة في هذه المجموعة</td><td>مرة واحدة يوميًا، مع الأكل أو بدونه</td></tr>
+<tr><td>جالفس - جالفِس</td><td>فيلداغليبتين - فِيلداغْلِيبتين</td><td>يستخدم غالبًا مع الميتفورمين</td><td>مرتين يوميًا (صباحًا ومساءً)، مع أو بدون أكل</td></tr>
+<tr><td>ترايجنتا - تْرايجِنتا</td><td>لينالغليبتين - لِيناغْلِيبتين</td><td>لا يحتاج تعديل جرعة لمرضى الكلى</td><td>مرة واحدة يوميًا، مع أو بدون أكل</td></tr>
+<tr><td>أونجليزا - أونجْليزا</td><td>ساكساغليبتين - ساكساغْلِيبتين</td><td>مرة واحدة يوميًا</td><td>مع أو بدون أكل</td></tr>
+</table>
 
-    <footer>
-        &copy; 2026 volt Language Project • Designed by ialidev
-    </footer>
+<h2>٤) مثبطات SGLT2 - مُثَبِّطات إس جي إل تي ٢</h2>
+<p class="desc">تجعل الكلى تتخلص من السكر الزائد عبر البول. تفيد أيضًا القلب والكلى، وقد تساعد في نقص الوزن، لكنها ترفع خطر التهابات المسالك البولية والجفاف.</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>جارديانس - جارديانس</td><td>إمباغليفلوزين - إمباغْلِيفلوزِين</td><td>له فوائد إضافية لحماية القلب والكلى</td><td>مرة واحدة يوميًا صباحًا، مع أو بدون أكل</td></tr>
+<tr><td>فورشيجا - فورشِيجا</td><td>داباغليفلوزين - داباغْلِيفلوزِين</td><td>مشابه لجارديانس، يُستخدم أيضًا لفشل القلب</td><td>مرة واحدة يوميًا صباحًا، مع أو بدون أكل</td></tr>
+<tr><td>إنفوكانا - إنفوكانا</td><td>كاناغليفلوزين - كاناغْلِيفلوزِين</td><td>من نفس المجموعة</td><td>مرة واحدة يوميًا قبل أول وجبة</td></tr>
+</table>
 
-    <script>
-        // محاكي المفسر والمترجم للغة volt مع تحويله لـ JS للتشغيل الفوري بالمتصفح
-        function runVoltCode() {
-            const code = document.getElementById('voltEditor').value;
-            const consoleBox = document.getElementById('voltConsole');
-            consoleBox.innerHTML = `<div class="console-line system-msg">[volt] Compiling and simulating execution...</div>`;
-            
-            const lines = code.split('\n');
-            let activeLibs = new Set();
-            let variables = {};
-            let outputLines = [];
-            let hasError = false;
+<h2>٥) ناهضات مستقبلات GLP-1 (حقن) - ناهِضات جي إل بي وان</h2>
+<p class="desc">حقن (وليست حبوب، عدا أوزمبيك الحبوب) تبطئ إفراغ المعدة، تقلل الشهية، وتخفض السكر بقوة مع إنقاص وزن ملحوظ.</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>أوزمبيك - أوزمبِيك</td><td>سيماغلوتيد حقن - سِيماغْلوتيد</td><td>حقنة أسبوعية، شائعة جدًا حاليًا لإنقاص الوزن والسكر</td><td>حقنة تحت الجلد مرة واحدة أسبوعيًا، بغض النظر عن الأكل</td></tr>
+<tr><td>ريباسيلوس - رِيباسِيلوس</td><td>سيماغلوتيد حبوب - سِيماغْلوتيد</td><td>نفس مادة أوزمبيك لكن بشكل حبوب</td><td>مرة واحدة يوميًا صباحًا على معدة فارغة قبل الفطور بـ٣٠ دقيقة بكمية ماء قليلة</td></tr>
+<tr><td>فيكتوزا - فِيكتوزا</td><td>ليراغلوتيد - لِيراغْلوتِيد</td><td>حقنة يومية، أقدم من أوزمبيك</td><td>حقنة تحت الجلد مرة واحدة يوميًا، بأي وقت مع أو بدون أكل</td></tr>
+<tr><td>تروليسيتي - تْرولِيسِيتي</td><td>دولاغلوتيد - دولاغْلوتِيد</td><td>حقنة أسبوعية سهلة الاستخدام (قلم جاهز)</td><td>حقنة تحت الجلد مرة واحدة أسبوعيًا، بغض النظر عن الأكل</td></tr>
+<tr><td>ماونجارو - ماونجارو</td><td>تيرزباتيد - تِرزِباتايد</td><td>يعمل على مستقبلين، فعال جدًا لخفض السكر والوزن</td><td>حقنة تحت الجلد مرة واحدة أسبوعيًا، بغض النظر عن الأكل</td></tr>
+</table>
 
-            // ثوابت الرياضيات المدمجة بلغة فولت
-            const MATH_CONSTANTS = {
-                "PI": 3.14159265358979,
-                "EUL": 2.71828182845904,
-                "PHI": 1.61803398874989
-            };
+<h2>٦) الثيازوليدين ديون - ثِيازولِيدِين دايون</h2>
+<p class="desc">تزيد حساسية خلايا الجسم للإنسولين، لكن قد تسبب احتباس سوائل وزيادة وزن، فتُستخدم بحذر خاصة مع مرضى القلب.</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>أكتوس - أكتوس</td><td>بيوغليتازون - بِيوغْلِيتازون</td><td>بطيء المفعول، يظهر أثره بعد أسابيع</td><td>مرة واحدة يوميًا، مع أو بدون أكل</td></tr>
+</table>
 
-            for (let i = 0; i < lines.length; i++) {
-                let line = lines[i].trim();
-                
-                // تخطي السطور الفارغة والتعليقات
-                if (!line || line.startsWith('#')) continue;
+<h2>٧) مثبطات ألفا-جلوكوزيداز - مُثَبِّطات ألفا جْلوكوزِيداز</h2>
+<p class="desc">تبطئ امتصاص النشويات من الأمعاء فيقل ارتفاع السكر بعد الأكل. غالبًا تسبب انتفاخ وغازات.</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>جلوكوباي - جْلوكوباي</td><td>أكاربوز - أكاربوز</td><td>يُؤخذ مع أول لقمة من الوجبة تحديدًا</td><td>مع أول لقمة من كل وجبة رئيسية، ٣ مرات يوميًا</td></tr>
+</table>
 
-                // 1. معالجة استدعاء المكتبات
-                if (line.startsWith('use ')) {
-                    let lib = line.substring(4).trim();
-                    activeLibs.add(lib);
-                    continue;
-                }
+<h2>٨) الميغليتينيدات - مِيغْلِيتِينيدات</h2>
+<p class="desc">مشابهة للسلفونيل يوريا لكن مفعولها أسرع وأقصر، مناسبة لمن مواعيد أكلهم غير منتظمة.</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>نوفونورم - نوفونورم</td><td>ريباغلينيد - رِيباغْلِينيد</td><td>يُؤخذ فقط إذا أكل الشخص وجبة (يُترك إن تُرِكت الوجبة)</td><td>قبل كل وجبة رئيسية بـ١٥-٣٠ دقيقة، حتى ٣-٤ مرات يوميًا</td></tr>
+</table>
 
-                try {
-                    // 2. معالجة طباعة المخرجات (out)
-                    if (line.startsWith('out ')) {
-                        let content = line.substring(4).trim();
-                        
-                        // فحص إذا كان نصاً ثابتاً محاطاً باقتباس
-                        if ((content.startsWith('"') && content.endsWith('"')) || (content.startsWith("'") && content.endsWith("'"))) {
-                            outputLines.push(content.slice(1, -1));
-                        } else {
-                            // فحص إذا كان متغيراً مسجلاً
-                            if (variables.hasOwnProperty(content)) {
-                                outputLines.push(variables[content]);
-                            } else {
-                                // فحص إذا كان ثابتاً رياضياً
-                                if (activeLibs.has('math') && MATH_CONSTANTS.hasOwnProperty(content)) {
-                                    outputLines.push(MATH_CONSTANTS[content]);
-                                } else {
-                                    throw new Error(`Variable or constant '${content}' is not declared.`);
-                                }
-                            }
-                        }
-                        continue;
-                    }
+<h2>٩) الإنسولين - إنْسولِين</h2>
+<p class="desc">يُستخدم في السكري النوع الأول دائمًا، وفي النوع الثاني عند عدم كفاية الحبوب. يُعطى بالحقن تحت الجلد وله أنواع حسب سرعة ومدة المفعول:</p>
+<table>
+<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
+<tr><td>نوفورابيد / هيومالوج - نوفورابِد / هِيومالوج</td><td>إنسولين سريع المفعول - إنسولين سَريع</td><td>يبدأ خلال ١٠-١٥ دقيقة، يغطي وجبة الأكل مباشرة</td><td>يُحقن قبل الوجبة بـ٥-١٥ دقيقة، حسب عدد الوجبات (عادة ٣ مرات)</td></tr>
+<tr><td>أكترابيد - أكتْرابِيد</td><td>إنسولين قصير المفعول - إنسولين قَصِير</td><td>يبدأ خلال ٣٠ دقيقة</td><td>يُحقن قبل الوجبة بـ٣٠ دقيقة</td></tr>
+<tr><td>إنسولاتارد / إن.بي.إتش - إنسولاتارد</td><td>إنسولين متوسط المفعول - إنسولين مُتَوَسِّط</td><td>يغطي نصف اليوم تقريبًا</td><td>مرة أو مرتين يوميًا، بغض النظر الدقيق عن وقت الأكل لكن بانتظام</td></tr>
+<tr><td>لانتوس / توجيو - لانتوس / توجِيو</td><td>إنسولين طويل المفعول - إنسولين طَوِيل</td><td>يعطي تغطية ثابتة على مدار ٢٤ ساعة</td><td>مرة واحدة يوميًا في نفس الوقت تقريبًا كل يوم، بغض النظر عن الأكل</td></tr>
+<tr><td>نوفوميكس / هيومالوج ميكس - نوفومِيكس</td><td>إنسولين مخلوط - إنسولين مَخْلوط</td><td>خليط من سريع ومتوسط في حقنة واحدة</td><td>قبل الفطور والعشاء بـ١٥-٣٠ دقيقة، مرتين يوميًا</td></tr>
+</table>
 
-                    // 3. معالجة الإسناد والإعلان عن المتغيرات (str, num, flt, var)
-                    if (line.startsWith('str ') || line.startsWith('num ') || line.startsWith('flt ') || line.startsWith('var ')) {
-                        let spaceIndex = line.indexOf(' ');
-                        let rest = line.substring(spaceIndex).trim();
-                        let parts = rest.split('=');
-                        
-                        if (parts.length < 2) throw new Error("Syntax error in variable assignment.");
-                        
-                        let varName = parts[0].trim();
-                        let varValueRaw = parts[1].trim();
-                        let finalValue = varValueRaw;
+<div class="notes">
+<b>ملاحظات عامة مهمة:</b><br>
+• لا تتوقف عن أي دواء أو تغيّر جرعته دون استشارة الطبيب، حتى لو شعرت بتحسن.<br>
+• أدوية السلفونيل يوريا والإنسولين هي الأكثر تسببًا في هبوط السكر، فاحرص على عدم تأخير الوجبة بعد أخذها.<br>
+• عند نسيان جرعة: لا تأخذ جرعة مضاعفة تعويضًا، إلا بتوجيه من الطبيب أو الصيدلي.<br>
+• أخبر طبيبك دائمًا عن وظائف الكلى والكبد لديك، فبعض هذه الأدوية تحتاج تعديل جرعة أو تُمنع عند القصور الكلوي.<br>
+• هذا الجدول لا يغطي كل الأسماء التجارية المتوفرة في كل بلد، فقد يختلف الاسم التجاري حسب الدولة والشركة المصنعة.
+</div>
 
-                        // معالجة الدوال المدمجة بالمكتبات إذا كانت نشطة
-                        if (varValueRaw.includes('(') && varValueRaw.endsWith(')')) {
-                            let fnName = varValueRaw.substring(0, varValueRaw.indexOf('(')).trim();
-                            let argsRaw = varValueRaw.substring(varValueRaw.indexOf('(') + 1, varValueRaw.length - 1);
-                            
-                            // دالة الجزر التربيعي من مكتبة الماث الخاصة بفولت
-                            if (fnName === 'sqr_val' && activeLibs.has('math')) {
-                                let arg = variables[argsRaw] !== undefined ? variables[argsRaw] : parseFloat(argsRaw);
-                                finalValue = Math.sqrt(arg);
-                            } 
-                            // دالة تحويل الحروف لكبيرة من مكتبة النصوص الخاصة بفولت
-                            else if (fnName === 'str_upr' && activeLibs.has('str')) {
-                                let arg = variables[argsRaw] !== undefined ? variables[argsRaw] : argsRaw.slice(1, -1);
-                                finalValue = String(arg).toUpperCase();
-                            }
-                            // دالة تحويل الحروف لصغيرة من مكتبة النصوص الخاصة بفولت
-                            else if (fnName === 'str_lwr' && activeLibs.has('str')) {
-                                let arg = variables[argsRaw] !== undefined ? variables[argsRaw] : argsRaw.slice(1, -1);
-                                finalValue = String(arg).toLowerCase();
-                            }
-                        } else {
-                            // إذا كانت قيمة عادية (نصية أو رقمية)
-                            if ((varValueRaw.startsWith('"') && varValueRaw.endsWith('"')) || (varValueRaw.startsWith("'") && varValueRaw.endsWith("'"))) {
-                                finalValue = varValueRaw.slice(1, -1);
-                            } else {
-                                finalValue = Number(varValueRaw) ? Number(varValueRaw) : varValueRaw;
-                            }
-                        }
-
-                        variables[varName] = finalValue;
-                        continue;
-                    }
-
-                } catch (err) {
-                    hasError = true;
-                    consoleBox.innerHTML += `<div class="console-line error-msg">[Runtime Error Line ${i+1}]: ${err.message}</div>`;
-                    break;
-                }
-            }
-
-            // عرض النتائج النهائية في التيرمينال
-            if (!hasError) {
-                outputLines.forEach(l => {
-                    consoleBox.innerHTML += `<div class="console-line">${l}</div>`;
-                });
-                consoleBox.innerHTML += `<div class="console-line system-msg" style="color: var(--success)">\n[Process completed successfully]</div>`;
-            }
-        }
-    </script>
 </body>
 </html>
