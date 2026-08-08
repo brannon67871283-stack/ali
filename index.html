@@ -1,117 +1,844 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="dark">
 <head>
-<meta charset="UTF-8">
-<title>دليل أدوية السكري</title>
-<style>
-  body { font-family: Tahoma, Arial, sans-serif; margin: 30px; line-height: 1.7; color: #222; }
-  h1 { color: #1F4E79; text-align: center; }
-  .subtitle { text-align: center; color: #666; font-style: italic; margin-bottom: 20px; }
-  .warning { border-top: 3px solid #C00000; border-bottom: 3px solid #C00000; color: #C00000; font-weight: bold; padding: 10px; margin-bottom: 25px; }
-  h2 { color: #1F4E79; border-bottom: 2px solid #2E74B5; padding-bottom: 5px; margin-top: 35px; }
-  p.desc { margin: 8px 0 12px 0; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-  th { background: #2E74B5; color: #fff; padding: 8px; text-align: right; font-size: 14px; }
-  td { border: 1px solid #ccc; padding: 8px; text-align: right; font-size: 14px; vertical-align: top; }
-  tr:nth-child(even) td { background: #f7f9fc; }
-  .notes { margin-top: 30px; background: #f2f2f2; padding: 15px; border-radius: 8px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlucoMind Pro - المنصة الطبية المتكاملة للسكري</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdf4', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf.js لتوليد ملفات PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- خط Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: #64748b55; border-radius: 8px; }
+        @keyframes toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .toast-item { animation: toast-in .25s ease-out; }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col antialiased">
 
-<h1>دليل أدوية السكري</h1>
-<p class="subtitle">الأنواع، الأسماء التجارية والعلمية، وطريقة الاستخدام</p>
+    <!-- ================= 1. الشريط العلوي للتنقل (Navbar) ================= -->
+    <header class="bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700/60 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
+            <!-- اللوجو واسم المنصة -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-500 dark:text-emerald-400 font-extrabold text-xl">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent">GlucoMind</h1>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 block -mt-1 font-medium" data-i18n="subtitle">عقل السكري الرقمي</span>
+                </div>
+            </div>
 
+            <!-- روابط التنقل بين الأقسام (Desktop) -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                <a href="#dashboard" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_dashboard">الرئيسية</a>
+                <a href="#log-entry" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_add">تسجيل قراءة</a>
+                <a href="#history" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_history">سجل القراءات</a>
+                <a href="#iraqi-food" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_food">دليل الأكل العراقي</a>
+                <a href="#report-section" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_report">تقرير الطبيب (PDF)</a>
+            </nav>
 
-<h2>١) الميتفورمين (Metformin) - مِتْفورمِين</h2>
-<p class="desc">الخط الأول لعلاج السكري النوع الثاني. يعمل على تقليل إنتاج الكبد للسكر وزيادة حساسية الجسم للإنسولين. لا يسبب هبوط سكر عادةً عند استخدامه لوحده.</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>جلوكوفاج - جْلوكوفاج</td><td>ميتفورمين - مِتْفورمِين</td><td>الشكل العادي سريع المفعول، الأكثر استخدامًا عالميًا</td><td>بعد الأكل مباشرة، مرتين إلى ثلاث مرات يوميًا (يبدأ الطبيب بجرعة منخفضة)</td></tr>
-<tr><td>جلوكوفاج XR - جْلوكوفاج إكس آر</td><td>ميتفورمين ممتد المفعول - مِتْفورمِين مُمتَد</td><td>إطلاق بطيء يقلل مشاكل المعدة</td><td>مرة واحدة يوميًا مع العشاء أو أكبر وجبة</td></tr>
-<tr><td>جانيومت - جانِيومِت</td><td>ميتفورمين + سيتاغليبتين</td><td>دواء مركب (جرعتين في قرص واحد)</td><td>مرتين يوميًا مع الأكل</td></tr>
-</table>
+            <!-- أدوات التحكم: المود واللغة والقائمة -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="تبديل المود">
+                    <i id="theme-icon" class="fa-solid fa-moon text-slate-600"></i>
+                </button>
 
-<h2>٢) مجموعة السلفونيل يوريا (Sulfonylureas) - سَلْفونِيل يوريا</h2>
-<p class="desc">تحفّز البنكرياس لإفراز إنسولين أكثر. فعالة لكنها قد تسبب هبوط السكر (خصوصًا إذا تأخر الأكل)، لذلك تؤخذ عادة قبل الوجبة مباشرة.</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>أماريل - أَماريل</td><td>جليميبرايد - جْليمِيبرايد</td><td>الأحدث في هذه المجموعة، جرعة واحدة تكفي غالبًا</td><td>قبل الفطور مباشرة (أو أول وجبة رئيسية)، مرة واحدة يوميًا</td></tr>
-<tr><td>ديامكرون MR - دِيامِكرون إم آر</td><td>جليكلازيد ممتد المفعول - جْليكلازِيد</td><td>خطر هبوط سكر أقل من غيره في المجموعة</td><td>قبل الفطور مباشرة، مرة واحدة يوميًا</td></tr>
-<tr><td>دَاؤنيل - دَاونِيل</td><td>جليبنكلاميد - جْليبِنكلامِيد</td><td>أقدم وأقوى، خطر هبوط السكر أعلى</td><td>قبل الوجبات مباشرة، مرة إلى مرتين يوميًا</td></tr>
-</table>
+                <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-500/20 transition-all">
+                    <span id="lang-btn-text">English</span>
+                </button>
 
-<h2>٣) مثبطات DPP-4 / الجليبتينات - مُثَبِّطات دي بي بي فور</h2>
-<p class="desc">تزيد هرمونات طبيعية تساعد البنكرياس على إفراز الإنسولين عند ارتفاع السكر فقط. لطيفة على المعدة ولا تسبب هبوط سكر عادة.</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>جانوفيا - جانوفِيا</td><td>سيتاغليبتين - سيتاغْلِيبتين</td><td>الأكثر شهرة في هذه المجموعة</td><td>مرة واحدة يوميًا، مع الأكل أو بدونه</td></tr>
-<tr><td>جالفس - جالفِس</td><td>فيلداغليبتين - فِيلداغْلِيبتين</td><td>يستخدم غالبًا مع الميتفورمين</td><td>مرتين يوميًا (صباحًا ومساءً)، مع أو بدون أكل</td></tr>
-<tr><td>ترايجنتا - تْرايجِنتا</td><td>لينالغليبتين - لِيناغْلِيبتين</td><td>لا يحتاج تعديل جرعة لمرضى الكلى</td><td>مرة واحدة يوميًا، مع أو بدون أكل</td></tr>
-<tr><td>أونجليزا - أونجْليزا</td><td>ساكساغليبتين - ساكساغْلِيبتين</td><td>مرة واحدة يوميًا</td><td>مع أو بدون أكل</td></tr>
-</table>
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors">
+                    <i id="mobile-menu-icon" class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
 
-<h2>٤) مثبطات SGLT2 - مُثَبِّطات إس جي إل تي ٢</h2>
-<p class="desc">تجعل الكلى تتخلص من السكر الزائد عبر البول. تفيد أيضًا القلب والكلى، وقد تساعد في نقص الوزن، لكنها ترفع خطر التهابات المسالك البولية والجفاف.</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>جارديانس - جارديانس</td><td>إمباغليفلوزين - إمباغْلِيفلوزِين</td><td>له فوائد إضافية لحماية القلب والكلى</td><td>مرة واحدة يوميًا صباحًا، مع أو بدون أكل</td></tr>
-<tr><td>فورشيجا - فورشِيجا</td><td>داباغليفلوزين - داباغْلِيفلوزِين</td><td>مشابه لجارديانس، يُستخدم أيضًا لفشل القلب</td><td>مرة واحدة يوميًا صباحًا، مع أو بدون أكل</td></tr>
-<tr><td>إنفوكانا - إنفوكانا</td><td>كاناغليفلوزين - كاناغْلِيفلوزِين</td><td>من نفس المجموعة</td><td>مرة واحدة يوميًا قبل أول وجبة</td></tr>
-</table>
+        <!-- روابط التنقل (Mobile) -->
+        <nav id="mobile-menu" class="hidden md:hidden flex-col gap-1 px-4 pb-4 text-sm font-medium border-t border-slate-200 dark:border-slate-700/60">
+            <a href="#dashboard" onclick="toggleMobileMenu()" class="block py-2.5 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_dashboard">الرئيسية</a>
+            <a href="#log-entry" onclick="toggleMobileMenu()" class="block py-2.5 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_add">تسجيل قراءة</a>
+            <a href="#history" onclick="toggleMobileMenu()" class="block py-2.5 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_history">سجل القراءات</a>
+            <a href="#iraqi-food" onclick="toggleMobileMenu()" class="block py-2.5 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_food">دليل الأكل العراقي</a>
+            <a href="#report-section" onclick="toggleMobileMenu()" class="block py-2.5 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" data-i18n="nav_report">تقرير الطبيب (PDF)</a>
+        </nav>
+    </header>
 
-<h2>٥) ناهضات مستقبلات GLP-1 (حقن) - ناهِضات جي إل بي وان</h2>
-<p class="desc">حقن (وليست حبوب، عدا أوزمبيك الحبوب) تبطئ إفراغ المعدة، تقلل الشهية، وتخفض السكر بقوة مع إنقاص وزن ملحوظ.</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>أوزمبيك - أوزمبِيك</td><td>سيماغلوتيد حقن - سِيماغْلوتيد</td><td>حقنة أسبوعية، شائعة جدًا حاليًا لإنقاص الوزن والسكر</td><td>حقنة تحت الجلد مرة واحدة أسبوعيًا، بغض النظر عن الأكل</td></tr>
-<tr><td>ريباسيلوس - رِيباسِيلوس</td><td>سيماغلوتيد حبوب - سِيماغْلوتيد</td><td>نفس مادة أوزمبيك لكن بشكل حبوب</td><td>مرة واحدة يوميًا صباحًا على معدة فارغة قبل الفطور بـ٣٠ دقيقة بكمية ماء قليلة</td></tr>
-<tr><td>فيكتوزا - فِيكتوزا</td><td>ليراغلوتيد - لِيراغْلوتِيد</td><td>حقنة يومية، أقدم من أوزمبيك</td><td>حقنة تحت الجلد مرة واحدة يوميًا، بأي وقت مع أو بدون أكل</td></tr>
-<tr><td>تروليسيتي - تْرولِيسِيتي</td><td>دولاغلوتيد - دولاغْلوتِيد</td><td>حقنة أسبوعية سهلة الاستخدام (قلم جاهز)</td><td>حقنة تحت الجلد مرة واحدة أسبوعيًا، بغض النظر عن الأكل</td></tr>
-<tr><td>ماونجارو - ماونجارو</td><td>تيرزباتيد - تِرزِباتايد</td><td>يعمل على مستقبلين، فعال جدًا لخفض السكر والوزن</td><td>حقنة تحت الجلد مرة واحدة أسبوعيًا، بغض النظر عن الأكل</td></tr>
-</table>
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
 
-<h2>٦) الثيازوليدين ديون - ثِيازولِيدِين دايون</h2>
-<p class="desc">تزيد حساسية خلايا الجسم للإنسولين، لكن قد تسبب احتباس سوائل وزيادة وزن، فتُستخدم بحذر خاصة مع مرضى القلب.</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>أكتوس - أكتوس</td><td>بيوغليتازون - بِيوغْلِيتازون</td><td>بطيء المفعول، يظهر أثره بعد أسابيع</td><td>مرة واحدة يوميًا، مع أو بدون أكل</td></tr>
-</table>
+        <!-- ================= 2. قسم الإحصائيات المباشرة (Dashboard) ================= -->
+        <section id="dashboard" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-lg">
+                <div class="flex justify-between items-center text-slate-500 dark:text-slate-400 text-sm">
+                    <span data-i18n="card_latest">آخر قراءة سكر</span>
+                    <i class="fa-solid fa-droplet text-red-400"></i>
+                </div>
+                <div class="flex items-baseline justify-between mt-3">
+                    <span id="stat-latest-bg" class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">--</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">mg/dL</span>
+                </div>
+                <p id="stat-latest-time" class="text-[11px] text-slate-400 dark:text-slate-500 mt-2" data-i18n="stat_no_data">لا توجد قراءات مسجلة</p>
+            </div>
 
-<h2>٧) مثبطات ألفا-جلوكوزيداز - مُثَبِّطات ألفا جْلوكوزِيداز</h2>
-<p class="desc">تبطئ امتصاص النشويات من الأمعاء فيقل ارتفاع السكر بعد الأكل. غالبًا تسبب انتفاخ وغازات.</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>جلوكوباي - جْلوكوباي</td><td>أكاربوز - أكاربوز</td><td>يُؤخذ مع أول لقمة من الوجبة تحديدًا</td><td>مع أول لقمة من كل وجبة رئيسية، ٣ مرات يوميًا</td></tr>
-</table>
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-lg">
+                <div class="flex justify-between items-center text-slate-500 dark:text-slate-400 text-sm">
+                    <span data-i18n="card_avg">متوسط السكر</span>
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i>
+                </div>
+                <div class="flex items-baseline justify-between mt-3">
+                    <span id="stat-avg-bg" class="text-3xl font-extrabold text-cyan-600 dark:text-cyan-400">--</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">mg/dL</span>
+                </div>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2" data-i18n="card_avg_sub">المعدل العام للسجلات</p>
+            </div>
 
-<h2>٨) الميغليتينيدات - مِيغْلِيتِينيدات</h2>
-<p class="desc">مشابهة للسلفونيل يوريا لكن مفعولها أسرع وأقصر، مناسبة لمن مواعيد أكلهم غير منتظمة.</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>نوفونورم - نوفونورم</td><td>ريباغلينيد - رِيباغْلِينيد</td><td>يُؤخذ فقط إذا أكل الشخص وجبة (يُترك إن تُرِكت الوجبة)</td><td>قبل كل وجبة رئيسية بـ١٥-٣٠ دقيقة، حتى ٣-٤ مرات يوميًا</td></tr>
-</table>
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-lg">
+                <div class="flex justify-between items-center text-slate-500 dark:text-slate-400 text-sm">
+                    <span data-i18n="card_range">ضمن المعدل المستهدف</span>
+                    <i class="fa-solid fa-bullseye text-emerald-400"></i>
+                </div>
+                <div class="flex items-baseline justify-between mt-3">
+                    <span id="stat-range-pct" class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">--</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">%</span>
+                </div>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2" data-i18n="card_range_sub">بين 70-180 mg/dL</p>
+            </div>
 
-<h2>٩) الإنسولين - إنْسولِين</h2>
-<p class="desc">يُستخدم في السكري النوع الأول دائمًا، وفي النوع الثاني عند عدم كفاية الحبوب. يُعطى بالحقن تحت الجلد وله أنواع حسب سرعة ومدة المفعول:</p>
-<table>
-<tr><th>الاسم التجاري (اللفظ)</th><th>الاسم العلمي (اللفظ)</th><th>شرح مختصر</th><th>طريقة الأخذ</th></tr>
-<tr><td>نوفورابيد / هيومالوج - نوفورابِد / هِيومالوج</td><td>إنسولين سريع المفعول - إنسولين سَريع</td><td>يبدأ خلال ١٠-١٥ دقيقة، يغطي وجبة الأكل مباشرة</td><td>يُحقن قبل الوجبة بـ٥-١٥ دقيقة، حسب عدد الوجبات (عادة ٣ مرات)</td></tr>
-<tr><td>أكترابيد - أكتْرابِيد</td><td>إنسولين قصير المفعول - إنسولين قَصِير</td><td>يبدأ خلال ٣٠ دقيقة</td><td>يُحقن قبل الوجبة بـ٣٠ دقيقة</td></tr>
-<tr><td>إنسولاتارد / إن.بي.إتش - إنسولاتارد</td><td>إنسولين متوسط المفعول - إنسولين مُتَوَسِّط</td><td>يغطي نصف اليوم تقريبًا</td><td>مرة أو مرتين يوميًا، بغض النظر الدقيق عن وقت الأكل لكن بانتظام</td></tr>
-<tr><td>لانتوس / توجيو - لانتوس / توجِيو</td><td>إنسولين طويل المفعول - إنسولين طَوِيل</td><td>يعطي تغطية ثابتة على مدار ٢٤ ساعة</td><td>مرة واحدة يوميًا في نفس الوقت تقريبًا كل يوم، بغض النظر عن الأكل</td></tr>
-<tr><td>نوفوميكس / هيومالوج ميكس - نوفومِيكس</td><td>إنسولين مخلوط - إنسولين مَخْلوط</td><td>خليط من سريع ومتوسط في حقنة واحدة</td><td>قبل الفطور والعشاء بـ١٥-٣٠ دقيقة، مرتين يوميًا</td></tr>
-</table>
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-lg">
+                <div class="flex justify-between items-center text-slate-500 dark:text-slate-400 text-sm">
+                    <span data-i18n="card_count">إجمالي المسجلات</span>
+                    <i class="fa-solid fa-list-check text-purple-400"></i>
+                </div>
+                <div class="flex items-baseline justify-between mt-3">
+                    <span id="stat-count" class="text-3xl font-extrabold text-purple-600 dark:text-purple-400">0</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400" data-i18n="unit_records">سجل</span>
+                </div>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2" data-i18n="card_count_sub">محفوظة في جهازك</p>
+            </div>
 
-<div class="notes">
-<b>ملاحظات عامة مهمة:</b><br>
-• لا تتوقف عن أي دواء أو تغيّر جرعته دون استشارة الطبيب، حتى لو شعرت بتحسن.<br>
-• أدوية السلفونيل يوريا والإنسولين هي الأكثر تسببًا في هبوط السكر، فاحرص على عدم تأخير الوجبة بعد أخذها.<br>
-• عند نسيان جرعة: لا تأخذ جرعة مضاعفة تعويضًا، إلا بتوجيه من الطبيب أو الصيدلي.<br>
-• أخبر طبيبك دائمًا عن وظائف الكلى والكبد لديك، فبعض هذه الأدوية تحتاج تعديل جرعة أو تُمنع عند القصور الكلوي.<br>
-• هذا الجدول لا يغطي كل الأسماء التجارية المتوفرة في كل بلد، فقد يختلف الاسم التجاري حسب الدولة والشركة المصنعة.
-</div>
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-lg">
+                <div class="flex justify-between items-center text-slate-500 dark:text-slate-400 text-sm">
+                    <span data-i18n="card_type">نوع السكري الفعّال</span>
+                    <i class="fa-solid fa-user-doctor text-amber-400"></i>
+                </div>
+                <div class="mt-3">
+                    <span id="stat-active-type" class="text-xl font-bold text-amber-600 dark:text-amber-400">--</span>
+                </div>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2" data-i18n="card_type_sub">يتم تحديثه مع كل تسجيل</p>
+            </div>
+        </section>
 
+        <!-- ================= 3. استمارة تسجيل قراءة جديدة ================= -->
+        <section id="log-entry" class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl">
+            <h2 class="text-lg font-bold flex items-center gap-2 mb-6">
+                <i class="fa-solid fa-pen-to-square text-emerald-500"></i>
+                <span data-i18n="form_title">تسجيل بيانات جديدة (قراءة، أكل، علاج)</span>
+            </h2>
+
+            <form id="diabetes-form" onsubmit="handleFormSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="lbl_datetime">التاريخ والوقت</label>
+                    <input type="datetime-local" id="field-datetime" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="lbl_type">نوع السكري</label>
+                    <select id="field-type" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30">
+                        <option value="T1D" data-i18n="opt_t1">النوع الأول (Type 1)</option>
+                        <option value="T2D" data-i18n="opt_t2">النوع الثاني (Type 2)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="lbl_glucose">قراءة السكر (mg/dL)</label>
+                    <input type="number" id="field-glucose" required min="20" max="600" step="1" placeholder="مثال: 145" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="lbl_iraqi_select">اختر وجبة عراقية (اختياري)</label>
+                    <select id="field-iraqi-preset" onchange="applyIraqiPreset()" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-amber-600 dark:text-amber-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30">
+                        <option value="" data-i18n="opt_preset_none">-- اختار وجبة مجهزة --</option>
+                        <option value="دولمة عراقية (10 حبات)|50">دولمة عراقية (~50g كربوهيدرات)</option>
+                        <option value="تمن وعصير مرقة فاصوليا/باميا|60">تمن ومرق فاصوليا (~60g كربوهيدرات)</option>
+                        <option value="تشريب لحم/دجاج مع صمون|65">تشريب لحم وصمون عراقي (~65g كربوهيدرات)</option>
+                        <option value="صمونة عراقية واحدة|30">صمونة عراقية واحدة (~30g كربوهيدرات)</option>
+                        <option value="صحن برياني عراقي|70">صحن برياني عراقي (~70g كربوهيدرات)</option>
+                        <option value="كباب عراقي مع خبز|35">كباب عراقي مع نصف رغيف (~35g كربوهيدرات)</option>
+                        <option value="باجة عراقية مع خبز|40">باجة عراقية مع خبز (~40g كربوهيدرات)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="lbl_food">وصف الوجبة وكمية الكربوهيدرات</label>
+                    <input type="text" id="field-food" placeholder="مثال: صمونة + كباب / 45g carbs" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="lbl_meds">العلاج / الأنسولين والجرعة</label>
+                    <input type="text" id="field-meds" placeholder="مثال: Novorapid 6U أو Metformin 500mg" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30">
+                </div>
+
+                <div class="md:col-span-2 lg:col-span-3 flex justify-end">
+                    <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span data-i18n="btn_save">حفظ السجل فوراً</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= 4. الرسم البياني والسجل التاريخي ================= -->
+        <section id="history" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-md font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-chart-area text-cyan-400"></i>
+                        <span data-i18n="chart_title">مخطط مستويات السكر عبر الوقت</span>
+                    </h3>
+                    <div class="hidden sm:flex items-center gap-3 text-[10px] text-slate-500 dark:text-slate-400">
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span><span data-i18n="legend_reading">القراءة</span></span>
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-0.5 bg-red-400 inline-block"></span><span data-i18n="legend_high">الحد الأعلى 180</span></span>
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-0.5 bg-blue-400 inline-block"></span><span data-i18n="legend_low">الحد الأدنى 70</span></span>
+                    </div>
+                </div>
+                <div class="h-72 w-full">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-md font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-purple-400"></i>
+                        <span data-i18n="table_title">السجلات الأخيرة</span>
+                    </h3>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportBackup()" class="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 transition-colors" data-i18n="btn_export" title="نسخ احتياطي">تصدير</button>
+                        <label class="text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 transition-colors cursor-pointer" data-i18n="btn_import" title="استيراد نسخة">
+                            استيراد
+                            <input type="file" accept="application/json" onchange="importBackup(event)" class="hidden">
+                        </label>
+                        <button onclick="clearAllLogs()" class="text-xs text-red-500 dark:text-red-400 hover:text-red-400 transition-colors" data-i18n="btn_clear">مسح الكل</button>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto max-h-72 space-y-3 pr-1" id="logs-container"></div>
+            </div>
+        </section>
+
+        <!-- ================= 5. قسم دليل الأكل العراقي ================= -->
+        <section id="iraqi-food" class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl">
+            <h2 class="text-lg font-bold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-utensils text-amber-400"></i>
+                <span data-i18n="food_guide_title">دليل المأكولات العراقية الشائعة لمرضى السكري</span>
+            </h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6" data-i18n="food_guide_desc">تقدير كميات الكربوهيدرات لمساعدتك في حساب جرعة الأنسولين أو تنظيم الوجبة</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 flex justify-between items-center">
+                    <div>
+                        <p class="font-bold text-slate-800 dark:text-slate-200" data-i18n="food_1_name">صمونة عراقية واحدة</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="food_1_weight">وزن ~90-100 غرام</p>
+                    </div>
+                    <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg text-xs font-bold">30g Carbs</span>
+                </div>
+
+                <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 flex justify-between items-center">
+                    <div>
+                        <p class="font-bold text-slate-800 dark:text-slate-200" data-i18n="food_2_name">صحن تمن مطبوخ (15 ملعقة)</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="food_2_weight">أرز أبيض مطبوخ</p>
+                    </div>
+                    <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg text-xs font-bold">45g Carbs</span>
+                </div>
+
+                <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 flex justify-between items-center">
+                    <div>
+                        <p class="font-bold text-slate-800 dark:text-slate-200" data-i18n="food_3_name">10 حبات دولمة</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="food_3_weight">حجم متوسط</p>
+                    </div>
+                    <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg text-xs font-bold">50g Carbs</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 6. قسم تصدير التقرير للطبيب (PDF) ================= -->
+        <section id="report-section" class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <h2 class="text-lg font-bold flex items-center gap-2 mb-1">
+                    <i class="fa-solid fa-file-pdf text-red-400"></i>
+                    <span data-i18n="pdf_title">تصدير تقرير طبي شامل للطبيب (PDF)</span>
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="pdf_desc">يقوم النظام بتجميع كل قراءاتك والأدوية والوجبات وإعداد ملف محترف يمكنك إرساله لطبيبك المعالج مباشرة.</p>
+            </div>
+
+            <button id="pdf-btn" onclick="generatePDFReport()" class="bg-red-600 hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center gap-2 whitespace-nowrap">
+                <i id="pdf-btn-icon" class="fa-solid fa-download"></i>
+                <span id="pdf-btn-text" data-i18n="btn_pdf">تحميل التقرير PDF</span>
+            </button>
+        </section>
+
+        <!-- قالب الـ PDF المعالج لإطراح صفحات بيضاء -->
+        <!-- ملاحظة تقنية: العنصر يبقى ضمن التدفق الطبيعي للمستند (وليس position:fixed أو إحداثيات
+             سالبة خارج الشاشة) لأن html2canvas يحسب إحداثيات الالتقاط اعتماداً على انزياح التمرير
+             (scroll offset) للمستند، وهذا الحساب يفشل مع position:fixed عندما تكون الصفحة ممررة للأسفل
+             (وهو وضع شائع جداً هنا لأن زر التحميل يقع أسفل الصفحة) فيخرج التقرير فارغاً. الحل: عنصر غلاف
+             بارتفاع صفر و overflow:hidden يُخفي المحتوى بصرياً دون كسر حسابات الالتقاط. -->
+        <div id="pdf-wrapper" style="position: relative; height: 0; overflow: hidden;">
+            <div id="pdf-template" class="p-8 bg-white text-slate-900 font-sans" style="position: absolute; top: 0; left: 0; width: 750px;" dir="rtl">
+                <div class="border-b-2 border-emerald-600 pb-4 mb-6 flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold text-emerald-700">تقرير المتابعة الدوري لمرض السكري</h1>
+                        <p class="text-xs text-slate-500 mt-1">تم إنشاؤه عبر منصة GlucoMind الرقمية</p>
+                    </div>
+                    <div class="text-left text-xs text-slate-500">
+                        <p>تاريخ التقرير: <span id="pdf-report-date"></span></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-lg text-sm border border-slate-200">
+                    <div><strong>إجمالي القراءات:</strong> <span id="pdf-total-logs">0</span></div>
+                    <div><strong>متوسط السكر:</strong> <span id="pdf-avg-bg">0</span> mg/dL</div>
+                    <div><strong>ضمن المعدل:</strong> <span id="pdf-range-pct">0</span>%</div>
+                    <div><strong>نوع السكري:</strong> <span id="pdf-type">--</span></div>
+                </div>
+
+                <h3 class="font-bold text-sm text-slate-800 mb-3">سجل القراءات والوجبات والعلاج التفصيلي:</h3>
+                <table class="w-full text-right text-xs border-collapse border border-slate-300">
+                    <thead>
+                        <tr class="bg-emerald-100 text-emerald-900">
+                            <th class="border border-slate-300 p-2">التاريخ والوقت</th>
+                            <th class="border border-slate-300 p-2">القراءة (mg/dL)</th>
+                            <th class="border border-slate-300 p-2">الوجبة / الكربوهيدرات</th>
+                            <th class="border border-slate-300 p-2">الدواء / الجرعة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pdf-table-body"></tbody>
+                </table>
+
+                <div class="mt-8 pt-4 border-t border-slate-200 text-xs text-slate-500 flex justify-between">
+                    <p>ملاحظة للطبيب: هذا التقرير مستخرج تلقائياً بناءً على تسجيلات المريض اليومية.</p>
+                    <p>التوقيع: ....................</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- حاوية إشعارات التوست -->
+    <div id="toast-container" class="fixed bottom-5 inset-x-0 flex flex-col items-center gap-2 z-[100] px-4 pointer-events-none"></div>
+
+    <!-- ================= JavaScript المحرك الكامل ================= -->
+    <script>
+        let logs = JSON.parse(localStorage.getItem('glucomind_logs')) || [];
+        let currentLang = localStorage.getItem('glucomind_lang') || 'ar';
+        let currentTheme = localStorage.getItem('glucomind_theme') || 'dark';
+        let chartInstance = null;
+        const RANGE_LOW = 70;
+        const RANGE_HIGH = 180;
+
+        const i18n = {
+            ar: {
+                subtitle: "عقل السكري الرقمي",
+                nav_dashboard: "الرئيسية", nav_add: "تسجيل قراءة", nav_history: "سجل القراءات", nav_food: "دليل الأكل العراقي", nav_report: "تقرير الطبيب (PDF)",
+                card_latest: "آخر قراءة سكر", card_avg: "متوسط السكر", card_avg_sub: "المعدل العام للسجلات",
+                card_range: "ضمن المعدل المستهدف", card_range_sub: "بين 70-180 mg/dL",
+                card_count: "إجمالي المسجلات", card_count_sub: "محفوظة في جهازك", unit_records: "سجل",
+                card_type: "نوع السكري الفعّال", card_type_sub: "يتم تحديثه مع كل تسجيل",
+                stat_no_data: "لا توجد قراءات مسجلة",
+                form_title: "تسجيل بيانات جديدة (قراءة، أكل، علاج)",
+                lbl_datetime: "التاريخ والوقت", lbl_type: "نوع السكري", lbl_glucose: "قراءة السكر (mg/dL)",
+                lbl_iraqi_select: "اختر وجبة عراقية (اختياري)", lbl_food: "وصف الوجبة وكمية الكربوهيدرات", lbl_meds: "العلاج / الأنسولين والجرعة",
+                opt_t1: "النوع الأول (Type 1)", opt_t2: "النوع الثاني (Type 2)", opt_preset_none: "-- اختار وجبة مجهزة --",
+                btn_save: "حفظ السجل فوراً", chart_title: "مخطط مستويات السكر عبر الوقت", table_title: "السجلات الأخيرة", btn_clear: "مسح الكل",
+                btn_export: "تصدير", btn_import: "استيراد",
+                legend_reading: "القراءة", legend_high: "الحد الأعلى 180", legend_low: "الحد الأدنى 70",
+                food_guide_title: "دليل المأكولات العراقية الشائعة لمرضى السكري", food_guide_desc: "تقدير كميات الكربوهيدرات لمساعدتك في حساب جرعة الأنسولين أو تنظيم الوجبة",
+                food_1_name: "صمونة عراقية واحدة", food_1_weight: "وزن ~90-100 غرام",
+                food_2_name: "صحن تمن مطبوخ (15 ملعقة)", food_2_weight: "أرز أبيض مطبوخ",
+                food_3_name: "10 حبات دولمة", food_3_weight: "حجم متوسط",
+                pdf_title: "تصدير تقرير طبي شامل للطبيب (PDF)", pdf_desc: "يقوم النظام بتجميع كل قراءاتك والأدوية والوجبات وإعداد ملف محترف يمكنك إرساله لطبيبك المعالج مباشرة.",
+                btn_pdf: "تحميل التقرير PDF", btn_pdf_loading: "جاري إنشاء الملف...",
+                empty_logs: "لا توجد سجلات بعد. أضف قراءتك الأولى بالأعلى!",
+                no_value: "لا يوجد",
+                toast_saved: "تم حفظ السجل بنجاح", toast_deleted: "تم حذف السجل", toast_cleared: "تم مسح كل السجلات",
+                toast_pdf_empty: "يرجى تسجيل قراءة واحدة على الأقل قبل تحميل التقرير", toast_pdf_ready: "تم تحميل تقرير PDF بنجاح",
+                toast_exported: "تم تصدير نسخة احتياطية", toast_imported: "تم استيراد السجلات بنجاح", toast_import_error: "ملف غير صالح، تعذر الاستيراد",
+                confirm_clear: "هل أنت متأكد من مسح جميع السجلات؟",
+                status_low: "منخفض", status_normal: "ضمن المعدل", status_high: "مرتفع"
+            },
+            en: {
+                subtitle: "Digital Diabetes Engine",
+                nav_dashboard: "Dashboard", nav_add: "Add Entry", nav_history: "Log History", nav_food: "Iraqi Food Guide", nav_report: "Doctor Report (PDF)",
+                card_latest: "Latest Glucose", card_avg: "Average Glucose", card_avg_sub: "Overall recorded average",
+                card_range: "Time in Range", card_range_sub: "Between 70-180 mg/dL",
+                card_count: "Total Logs", card_count_sub: "Saved on your device", unit_records: "logs",
+                card_type: "Active Diabetes Type", card_type_sub: "Updated with each entry",
+                stat_no_data: "No readings logged yet",
+                form_title: "Log New Data (Glucose, Food, Meds)",
+                lbl_datetime: "Date & Time", lbl_type: "Diabetes Type", lbl_glucose: "Glucose Reading (mg/dL)",
+                lbl_iraqi_select: "Select Iraqi Meal (Optional)", lbl_food: "Meal Description & Carbs", lbl_meds: "Medication / Insulin Dose",
+                opt_t1: "Type 1", opt_t2: "Type 2", opt_preset_none: "-- Select a preset meal --",
+                btn_save: "Save Log Now", chart_title: "Glucose Levels Over Time", table_title: "Recent Entries", btn_clear: "Clear All",
+                btn_export: "Export", btn_import: "Import",
+                legend_reading: "Reading", legend_high: "High target 180", legend_low: "Low target 70",
+                food_guide_title: "Common Iraqi Food Guide for Diabetics", food_guide_desc: "Estimated carbohydrate values to help with insulin dosing or meal planning",
+                food_1_name: "One Iraqi samoon roll", food_1_weight: "~90-100g weight",
+                food_2_name: "Cooked rice plate (15 spoons)", food_2_weight: "White cooked rice",
+                food_3_name: "10 pieces of dolma", food_3_weight: "Medium size",
+                pdf_title: "Export Comprehensive Clinical PDF Report", pdf_desc: "The system compiles all your readings, meds, and meals into a professional PDF ready to share with your doctor.",
+                btn_pdf: "Download PDF Report", btn_pdf_loading: "Generating file...",
+                empty_logs: "No logs yet. Add your first reading above!",
+                no_value: "None",
+                toast_saved: "Log saved successfully", toast_deleted: "Log deleted", toast_cleared: "All logs cleared",
+                toast_pdf_empty: "Please log at least one reading before downloading the report", toast_pdf_ready: "PDF report downloaded successfully",
+                toast_exported: "Backup exported", toast_imported: "Logs imported successfully", toast_import_error: "Invalid file, could not import",
+                confirm_clear: "Are you sure you want to clear all logs?",
+                status_low: "Low", status_normal: "In range", status_high: "High"
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('field-datetime').value = now.toISOString().slice(0, 16);
+
+            applyTheme(currentTheme);
+            applyLanguage(currentLang);
+            initChart();
+            renderLogs();
+            updateStats();
+        });
+
+        function t(key) {
+            return i18n[currentLang][key] || key;
+        }
+
+        function classifyGlucose(value) {
+            if (value < RANGE_LOW) return { key: 'status_low', text: t('status_low'), text_cls: 'text-blue-600 dark:text-blue-400', badge_cls: 'bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400' };
+            if (value > RANGE_HIGH) return { key: 'status_high', text: t('status_high'), text_cls: 'text-red-600 dark:text-red-400', badge_cls: 'bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400' };
+            return { key: 'status_normal', text: t('status_normal'), text_cls: 'text-emerald-600 dark:text-emerald-400', badge_cls: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400' };
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const log = {
+                id: Date.now(),
+                datetime: document.getElementById('field-datetime').value,
+                type: document.getElementById('field-type').value,
+                glucose: parseFloat(document.getElementById('field-glucose').value),
+                food: document.getElementById('field-food').value.trim(),
+                meds: document.getElementById('field-meds').value.trim()
+            };
+
+            logs.unshift(log);
+            saveLogs();
+
+            document.getElementById('field-glucose').value = '';
+            document.getElementById('field-food').value = '';
+            document.getElementById('field-meds').value = '';
+            document.getElementById('field-iraqi-preset').value = '';
+
+            renderLogs();
+            updateStats();
+            updateChart();
+            showToast(t('toast_saved'), 'success');
+        }
+
+        function saveLogs() {
+            localStorage.setItem('glucomind_logs', JSON.stringify(logs));
+        }
+
+        function applyIraqiPreset() {
+            const presetVal = document.getElementById('field-iraqi-preset').value;
+            if (presetVal) {
+                const [foodName, carbs] = presetVal.split('|');
+                document.getElementById('field-food').value = `${foodName} (${carbs}g carbs)`;
+            }
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logs-container');
+            container.innerHTML = '';
+
+            if (logs.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 dark:text-slate-500 text-center py-6">${t('empty_logs')}</p>`;
+                return;
+            }
+
+            logs.forEach(log => {
+                const dateObj = new Date(log.datetime);
+                const formattedDate = dateObj.toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const status = classifyGlucose(log.glucose);
+                const foodText = log.food || t('no_value');
+                const medsText = log.meds || t('no_value');
+
+                const item = document.createElement('div');
+                item.className = "bg-slate-100 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700/50 flex items-center justify-between text-xs";
+                item.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-bold ${status.text_cls} text-sm">${log.glucose} mg/dL</span>
+                            <span class="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 rounded text-[10px]">${log.type}</span>
+                            <span class="px-1.5 py-0.5 border rounded text-[10px] font-semibold ${status.badge_cls}">${status.text}</span>
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-300"><i class="fa-solid fa-utensils text-slate-400 dark:text-slate-500 ml-1"></i> ${foodText}</p>
+                        <p class="text-slate-500 dark:text-slate-400"><i class="fa-solid fa-pills text-slate-400 dark:text-slate-500 ml-1"></i> ${medsText}</p>
+                    </div>
+                    <div class="text-left space-y-2 shrink-0 pl-2">
+                        <span class="text-[10px] text-slate-400 dark:text-slate-500 block">${formattedDate}</span>
+                        <button onclick="deleteLog(${log.id})" class="text-red-500 dark:text-red-400 hover:text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function updateStats() {
+            const typeLabels = { T1D: currentLang === 'ar' ? 'النوع الأول (T1D)' : 'Type 1 (T1D)', T2D: currentLang === 'ar' ? 'النوع الثاني (T2D)' : 'Type 2 (T2D)' };
+
+            if (logs.length === 0) {
+                document.getElementById('stat-latest-bg').innerText = '--';
+                document.getElementById('stat-avg-bg').innerText = '--';
+                document.getElementById('stat-range-pct').innerText = '--';
+                document.getElementById('stat-count').innerText = '0';
+                document.getElementById('stat-active-type').innerText = '--';
+                document.getElementById('stat-latest-time').innerText = t('stat_no_data');
+                return;
+            }
+
+            const latest = logs[0];
+            const sum = logs.reduce((acc, curr) => acc + curr.glucose, 0);
+            const avg = Math.round(sum / logs.length);
+            const inRangeCount = logs.filter(l => l.glucose >= RANGE_LOW && l.glucose <= RANGE_HIGH).length;
+            const rangePct = Math.round((inRangeCount / logs.length) * 100);
+            const latestStatus = classifyGlucose(latest.glucose);
+
+            const latestEl = document.getElementById('stat-latest-bg');
+            latestEl.innerText = latest.glucose;
+            latestEl.className = `text-3xl font-extrabold ${latestStatus.text_cls}`;
+
+            document.getElementById('stat-latest-time').innerText = new Date(latest.datetime).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US');
+            document.getElementById('stat-avg-bg').innerText = avg;
+            document.getElementById('stat-range-pct').innerText = rangePct;
+            document.getElementById('stat-count').innerText = logs.length;
+            document.getElementById('stat-active-type').innerText = typeLabels[latest.type] || latest.type;
+        }
+
+        function deleteLog(id) {
+            logs = logs.filter(l => l.id !== id);
+            saveLogs();
+            renderLogs();
+            updateStats();
+            updateChart();
+            showToast(t('toast_deleted'), 'info');
+        }
+
+        function clearAllLogs() {
+            if (logs.length === 0) return;
+            if (confirm(t('confirm_clear'))) {
+                logs = [];
+                localStorage.removeItem('glucomind_logs');
+                renderLogs();
+                updateStats();
+                updateChart();
+                showToast(t('toast_cleared'), 'info');
+            }
+        }
+
+        function exportBackup() {
+            const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `glucomind_backup_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showToast(t('toast_exported'), 'success');
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (!Array.isArray(imported)) throw new Error('invalid');
+                    const existingIds = new Set(logs.map(l => l.id));
+                    const merged = imported.filter(l => l && typeof l.glucose === 'number' && !existingIds.has(l.id));
+                    logs = [...merged, ...logs].sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+                    saveLogs();
+                    renderLogs();
+                    updateStats();
+                    updateChart();
+                    showToast(t('toast_imported'), 'success');
+                } catch (err) {
+                    showToast(t('toast_import_error'), 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function getChartColors() {
+            const isDark = document.documentElement.classList.contains('dark');
+            return {
+                grid: isDark ? '#334155' : '#e2e8f0',
+                ticks: isDark ? '#64748b' : '#94a3b8',
+                legend: isDark ? '#94a3b8' : '#475569'
+            };
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            const colors = getChartColors();
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: t('legend_reading'),
+                            data: [],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#10b981',
+                            pointRadius: 3
+                        },
+                        {
+                            label: t('legend_high'),
+                            data: [],
+                            borderColor: '#f87171',
+                            borderDash: [6, 6],
+                            borderWidth: 1.5,
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: t('legend_low'),
+                            data: [],
+                            borderColor: '#60a5fa',
+                            borderDash: [6, 6],
+                            borderWidth: 1.5,
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: colors.ticks }, grid: { color: colors.grid } },
+                        y: { ticks: { color: colors.ticks }, grid: { color: colors.grid } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+            updateChart();
+        }
+
+        function updateChart() {
+            if (!chartInstance) return;
+            const sortedLogs = [...logs].reverse();
+            const labels = sortedLogs.map(l => new Date(l.datetime).toLocaleTimeString(currentLang === 'ar' ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit' }));
+            chartInstance.data.labels = labels;
+            chartInstance.data.datasets[0].data = sortedLogs.map(l => l.glucose);
+            chartInstance.data.datasets[0].label = t('legend_reading');
+            chartInstance.data.datasets[1].data = labels.map(() => RANGE_HIGH);
+            chartInstance.data.datasets[1].label = t('legend_high');
+            chartInstance.data.datasets[2].data = labels.map(() => RANGE_LOW);
+            chartInstance.data.datasets[2].label = t('legend_low');
+            chartInstance.update();
+        }
+
+        function refreshChartTheme() {
+            if (!chartInstance) return;
+            const colors = getChartColors();
+            chartInstance.options.scales.x.ticks.color = colors.ticks;
+            chartInstance.options.scales.x.grid.color = colors.grid;
+            chartInstance.options.scales.y.ticks.color = colors.ticks;
+            chartInstance.options.scales.y.grid.color = colors.grid;
+            chartInstance.update();
+        }
+
+        // --- مولد الـ PDF المصلح ---
+        // المشكلة السابقة: القالب كان مموضعاً خارج الشاشة بإحداثيات سالبة (left:-9999px)
+        // وبعض المتصفحات لا ترسم عناصر html2canvas بشكل صحيح في هذه الحالة فيخرج PDF فارغاً.
+        // الحل: نُظهر القالب فعلياً (خلف باقي المحتوى بواسطة z-index) أثناء الالتقاط فقط، ثم نُخفيه.
+        function generatePDFReport() {
+            if (logs.length === 0) {
+                showToast(t('toast_pdf_empty'), 'error');
+                return;
+            }
+
+            const pdfBtn = document.getElementById('pdf-btn');
+            const pdfBtnText = document.getElementById('pdf-btn-text');
+            const pdfBtnIcon = document.getElementById('pdf-btn-icon');
+            const originalText = pdfBtnText.innerText;
+            pdfBtn.disabled = true;
+            pdfBtnText.innerText = t('btn_pdf_loading');
+            pdfBtnIcon.className = 'fa-solid fa-spinner fa-spin';
+
+            document.getElementById('pdf-report-date').innerText = new Date().toLocaleDateString('ar-EG');
+            document.getElementById('pdf-total-logs').innerText = logs.length;
+            const avg = Math.round(logs.reduce((acc, curr) => acc + curr.glucose, 0) / logs.length);
+            const inRangeCount = logs.filter(l => l.glucose >= RANGE_LOW && l.glucose <= RANGE_HIGH).length;
+            document.getElementById('pdf-avg-bg').innerText = avg;
+            document.getElementById('pdf-range-pct').innerText = Math.round((inRangeCount / logs.length) * 100);
+            document.getElementById('pdf-type').innerText = logs[0].type;
+
+            const tbody = document.getElementById('pdf-table-body');
+            tbody.innerHTML = '';
+            logs.forEach(l => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="border border-slate-300 p-2">${new Date(l.datetime).toLocaleString('ar-EG')}</td>
+                    <td class="border border-slate-300 p-2 font-bold">${l.glucose}</td>
+                    <td class="border border-slate-300 p-2">${l.food || t('no_value')}</td>
+                    <td class="border border-slate-300 p-2">${l.meds || t('no_value')}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const element = document.getElementById('pdf-template');
+
+            const opt = {
+                margin: [0.3, 0.3, 0.3, 0.3],
+                filename: `Diabetes_Report_${new Date().toISOString().slice(0, 10)}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                // scrollX/scrollY: 0 يمنعان html2canvas من إضافة انزياح تمرير الصفحة الحالي
+                // إلى إحداثيات الالتقاط، وهو السبب الشائع لخروج التقرير فارغاً عند التمرير للأسفل
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: document.documentElement.scrollWidth },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // فرض إعادة رسم (reflow/paint) كاملة قبل الالتقاط عبر انتظار إطارين متتاليين،
+            // لضمان أن المتصفح انتهى فعلياً من رسم محتوى الجدول قبل أن يبدأ html2canvas عمله
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    html2pdf().set(opt).from(element).save().then(() => {
+                        showToast(t('toast_pdf_ready'), 'success');
+                    }).catch(() => {
+                        showToast(t('toast_import_error'), 'error');
+                    }).finally(() => {
+                        pdfBtn.disabled = false;
+                        pdfBtnText.innerText = originalText;
+                        pdfBtnIcon.className = 'fa-solid fa-download';
+                    });
+                });
+            });
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('glucomind_theme', currentTheme);
+            applyTheme(currentTheme);
+            refreshChartTheme();
+        }
+
+        function applyTheme(theme) {
+            const icon = document.getElementById('theme-icon');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                icon.className = 'fa-solid fa-sun text-amber-400';
+            } else {
+                document.documentElement.classList.remove('dark');
+                icon.className = 'fa-solid fa-moon text-slate-600';
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            const isHidden = menu.classList.contains('hidden');
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+                icon.className = 'fa-solid fa-bars';
+            }
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            localStorage.setItem('glucomind_lang', currentLang);
+            applyLanguage(currentLang);
+        }
+
+        function applyLanguage(lang) {
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+            document.getElementById('lang-btn-text').innerText = lang === 'ar' ? 'English' : 'عربي';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    el.innerText = i18n[lang][key];
+                }
+            });
+
+            renderLogs();
+            updateStats();
+            updateChart();
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const colors = {
+                success: 'bg-emerald-600 border-emerald-500',
+                error: 'bg-red-600 border-red-500',
+                info: 'bg-slate-700 border-slate-600'
+            };
+            const icons = {
+                success: 'fa-circle-check',
+                error: 'fa-circle-exclamation',
+                info: 'fa-circle-info'
+            };
+            const toast = document.createElement('div');
+            toast.className = `toast-item ${colors[type] || colors.info} text-white text-sm font-medium px-4 py-3 rounded-xl shadow-2xl border flex items-center gap-2 pointer-events-auto max-w-sm`;
+            toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.transition = 'opacity .3s, transform .3s';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 2800);
+        }
+    </script>
 </body>
 </html>
