@@ -304,13 +304,13 @@
         </section>
 
         <!-- قالب الـ PDF المعالج لإطراح صفحات بيضاء -->
-        <!-- ملاحظة تقنية: العنصر يبقى ضمن التدفق الطبيعي للمستند (وليس position:fixed أو إحداثيات
-             سالبة خارج الشاشة) لأن html2canvas يحسب إحداثيات الالتقاط اعتماداً على انزياح التمرير
-             (scroll offset) للمستند، وهذا الحساب يفشل مع position:fixed عندما تكون الصفحة ممررة للأسفل
-             (وهو وضع شائع جداً هنا لأن زر التحميل يقع أسفل الصفحة) فيخرج التقرير فارغاً. الحل: عنصر غلاف
-             بارتفاع صفر و overflow:hidden يُخفي المحتوى بصرياً دون كسر حسابات الالتقاط. -->
-        <div id="pdf-wrapper" style="position: relative; height: 0; overflow: hidden;">
-            <div id="pdf-template" class="p-8 bg-white text-slate-900 font-sans" style="position: absolute; top: 0; left: 0; width: 750px;" dir="rtl">
+        <!-- ملاحظة تقنية: السبب الحقيقي لخروج التقرير فارغاً هو أن html2canvas يواجه مشكلة معروفة
+             وموثقة في رسم النصوص العربية (RTL) مع خطوط الويب المخصصة (Tajawal) — يرسم الخلفيات
+             والحدود لكن يفشل بصمت برسم النص نفسه. الحل الفعلي هو تفعيل foreignObjectRendering
+             (الذي يجعل المتصفح نفسه يرسم النص بدل محرك html2canvas الداخلي) مع انتظار تحميل
+             الخط كاملاً قبل الالتقاط. -->
+        <div id="pdf-wrapper" style="position: absolute; left: -9999px; top: -9999px;">
+            <div id="pdf-template" class="p-8 bg-white text-slate-900 font-sans" style="width: 750px;" dir="rtl">
                 <div class="border-b-2 border-emerald-600 pb-4 mb-6 flex justify-between items-center">
                     <div>
                         <h1 class="text-2xl font-bold text-emerald-700">تقرير المتابعة الدوري لمرض السكري</h1>
@@ -737,26 +737,25 @@
                 margin: [0.3, 0.3, 0.3, 0.3],
                 filename: `Diabetes_Report_${new Date().toISOString().slice(0, 10)}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                // scrollX/scrollY: 0 يمنعان html2canvas من إضافة انزياح تمرير الصفحة الحالي
-                // إلى إحداثيات الالتقاط، وهو السبب الشائع لخروج التقرير فارغاً عند التمرير للأسفل
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: document.documentElement.scrollWidth },
+                // foreignObjectRendering:true يجعل المتصفح نفسه يرسم النص (بدل محرك رسم html2canvas
+                // الداخلي)، وهذا يحل مشكلة عدم ظهور النص العربي/RTL مع خطوط الويب المخصصة، وهي مشكلة
+                // معروفة وموثقة في html2canvas تُنتج صفحات فارغة أو بلا نص ظاهر.
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', foreignObjectRendering: true },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
-            // فرض إعادة رسم (reflow/paint) كاملة قبل الالتقاط عبر انتظار إطارين متتاليين،
-            // لضمان أن المتصفح انتهى فعلياً من رسم محتوى الجدول قبل أن يبدأ html2canvas عمله
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    html2pdf().set(opt).from(element).save().then(() => {
-                        showToast(t('toast_pdf_ready'), 'success');
-                    }).catch(() => {
-                        showToast(t('toast_import_error'), 'error');
-                    }).finally(() => {
-                        pdfBtn.disabled = false;
-                        pdfBtnText.innerText = originalText;
-                        pdfBtnIcon.className = 'fa-solid fa-download';
-                    });
-                });
+            // ننتظر تحميل الخط (Tajawal) بشكل كامل قبل الالتقاط؛ التقاط الصورة قبل جهوزية الخط
+            // من الأسباب الشائعة لظهور نص مفقود أو صفحة فارغة
+            document.fonts.ready.then(() => {
+                return html2pdf().set(opt).from(element).save();
+            }).then(() => {
+                showToast(t('toast_pdf_ready'), 'success');
+            }).catch(() => {
+                showToast(t('toast_import_error'), 'error');
+            }).finally(() => {
+                pdfBtn.disabled = false;
+                pdfBtnText.innerText = originalText;
+                pdfBtnIcon.className = 'fa-solid fa-download';
             });
         }
 
